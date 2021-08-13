@@ -62,6 +62,11 @@ public class WeaponTower : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Place Weapon
+    /// </summary>
+    /// <param name="_weapon"></param>
+    /// <returns></returns>
     public bool PlaceWeapon(AWeapon _weapon)
     {
         if (IsWeaponPlaced)
@@ -75,6 +80,10 @@ public class WeaponTower : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// Rotate Tower in x rotation
+    /// </summary>
+    /// <param name="_newValue">new absolute rotation</param>
     public void RotateX(float _newValue)
     {
         _newValue = ConvertIn180Space(_newValue);
@@ -83,14 +92,17 @@ public class WeaponTower : MonoBehaviour
         Vector3 finalRotationX = new Vector3(_newValue, m_RotationTransformX.eulerAngles.y, m_RotationTransformX.eulerAngles.z);
         m_RotationTransformX.rotation = Quaternion.Euler(finalRotationX);
     }
+
+    /// <summary>
+    /// Rotate Tower in y Rotation
+    /// </summary>
+    /// <param name="_newValue">new absolute rotation</param>
     public void RotateY(float _newValue)
     {
         _newValue = ConvertIn180Space(_newValue);
         _newValue = CheckMinMaxRotation(_newValue, m_RangeY);
 
         Vector3 finalRotationY = new Vector3(m_RotationTransformY.rotation.eulerAngles.x, _newValue, m_RotationTransformY.rotation.eulerAngles.z);
-        Debug.Log($"Current: {m_RotationTransformY.rotation.eulerAngles} | After: {finalRotationY}");
-        //m_RotationTransformY.Rotate(finalRotationY, Space.Self);
         m_RotationTransformY.rotation = Quaternion.Euler(finalRotationY);
     }
 
