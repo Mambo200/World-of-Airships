@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public abstract class AShip : MonoBehaviour
 {
@@ -50,11 +51,21 @@ public abstract class AShip : MonoBehaviour
         }
     }
 
-    public virtual void Init()
-    {
-        
-    }
+    private Rigidbody rigid;
+    private NavMeshAgent agent;
 
+    private void Start()
+    {
+        rigid = GetComponent<Rigidbody>();
+        if(rigid == null)
+        {
+            agent = GetComponent<NavMeshAgent>();
+            if(agent == null)
+            {
+                Debug.LogWarning("Schiff braucht ein Rigidbody oder NavmeshAgent");
+            }
+        }
+    }
 
     /// <summary>
     /// Bewegt das Schiff vor oder zurück
@@ -62,7 +73,7 @@ public abstract class AShip : MonoBehaviour
     /// <param name="_dir">Richtung pos == vor und neg == zurück</param>
     public virtual void MoveShip(float _dir)
     {
-
+        //TODO: Move Ship
     }
 
     /// <summary>
@@ -71,7 +82,7 @@ public abstract class AShip : MonoBehaviour
     /// <param name="_dir">Richtung</param>
     public virtual void RotateShip(float _dir)
     {
-
+        //TODO: Rotate Ship
     }
 
     /// <summary>
@@ -81,11 +92,11 @@ public abstract class AShip : MonoBehaviour
     /// <param name="_y">Y Axis</param>
     public virtual void RotateWeapon(float _x, float _y)
     {
-
+        //TODO: Rotate WeaponTower
     }
 
     public virtual void Fire()
     {
-
+        //TODO: Weapon Fire
     }
 }

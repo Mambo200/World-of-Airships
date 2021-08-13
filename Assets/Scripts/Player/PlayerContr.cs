@@ -28,6 +28,8 @@ public class PlayerContr : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        transform.position = ControlledShip.transform.position;
+
         ControlledShip.MoveShip(Input.GetAxis("Vertical"));
         ControlledShip.RotateShip(Input.GetAxis("Horizontal"));
 
