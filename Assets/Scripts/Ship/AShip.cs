@@ -26,6 +26,11 @@ public abstract class AShip : MonoBehaviour
 
     private float hitpoints;
 
+    [SerializeField]
+    private List<WeaponTower> turrets;
+    [SerializeField]
+    private List<AWeapon> weapons;
+
     /// <summary>
     /// Sind die Aktuellen Hitpoints des Schiffs
     /// Begrenzt automatisch beim Maximum
@@ -96,6 +101,16 @@ public abstract class AShip : MonoBehaviour
         }
 
         IgnoreMask = ~IgnoreMask;
+
+        foreach(WeaponTower tower in GetComponentsInChildren<WeaponTower>())
+        {
+            turrets.Add(tower);
+        }
+
+        foreach(AWeapon weapon in GetComponentsInChildren<AWeapon>())
+        {
+            weapons.Add(weapon);
+        }
     }
 
     /// <summary>
@@ -148,11 +163,20 @@ public abstract class AShip : MonoBehaviour
     /// <param name="_y">Y Axis</param>
     public virtual void RotateWeapon(float _x, float _y)
     {
+        foreach(WeaponTower tower in turrets)
+        {
+            tower.RotateX(_x);
+            tower.RotateY(_y);
+        }
         //TODO: Rotate WeaponTower
     }
 
     public virtual void Fire()
     {
+        foreach(AWeapon weapon in weapons)
+        {
+            weapon.Shoot();
+        }
         //TODO: Weapon Fire
     }
 
