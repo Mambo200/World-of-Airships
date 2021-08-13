@@ -99,4 +99,9 @@ public abstract class AShip : MonoBehaviour
     {
         //TODO: Weapon Fire
     }
+
+    public void MoveToPosition(Vector3 _pos)
+    {
+        //TODO: Add Movement from navemeshAgent
+    }
 }
