@@ -22,8 +22,6 @@ public class Cannon : AWeapon
         {
             Shoot();
         }
-
-        Debug.Log(CurrentShootCooldownTimer);
     }
 
     public override void Shoot()
