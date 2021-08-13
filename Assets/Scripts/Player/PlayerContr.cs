@@ -33,8 +33,11 @@ public class PlayerContr : MonoBehaviour
         ControlledShip.MoveShip(Input.GetAxis("Vertical"));
         ControlledShip.RotateShip(Input.GetAxis("Horizontal"));
 
-        cam_X += Input.GetAxis("Mouse Y") * cam_X_Speed;
-        cam_Y += Input.GetAxis("Mouse X") * cam_Y_Speed;
+        cam_X += Input.GetAxis("Mouse Y") * cam_X_Speed * Time.deltaTime;
+        cam_Y -= Input.GetAxis("Mouse X") * cam_Y_Speed * Time.deltaTime;
+        transform.eulerAngles = new Vector3(
+            Mathf.Clamp(cam_X, cam_X_min, cam_X_max)
+            ,cam_Y,0);
         ControlledShip.RotateWeapon(cam_X, cam_Y);
 
         if (Input.GetMouseButtonDown(0))
