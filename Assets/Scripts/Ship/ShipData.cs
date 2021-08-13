@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/ShipData")]
 public class ShipData : ScriptableObject
 {
     [SerializeField]
@@ -13,8 +14,8 @@ public class ShipData : ScriptableObject
             return className;
         }
     }
-    private ShipType type;
     [SerializeField]
+    private ShipType type;
     public ShipType Type
     {
         get
@@ -22,8 +23,8 @@ public class ShipData : ScriptableObject
             return type;
         }
     }
-    private float hitpoints;
     [SerializeField]
+    private float hitpoints;
     public float Hitpoints
     {
         get
