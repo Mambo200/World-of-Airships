@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9eb24d86b94a85e4e85d7b911005d1a6, type: 3}
-  m_Name: TowerData
-  m_EditorClassIdentifier: 
-  m_RangeX: {x: -20, y: 20}
-  m_RangeY: {x: -50, y: 50}
+  m_Script: {fileID: 11500000, guid: 2d601b78d3562fe40adb09edda7ea290, type: 3}
+  m_Name: TowerPrefabsData
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponData
+  m_CannonPrefab: {fileID: 6765972582029483603, guid: d44eedd4e079bba409293d6831b9fb70, type: 3}
