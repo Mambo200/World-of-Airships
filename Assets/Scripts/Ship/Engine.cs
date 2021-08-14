@@ -48,8 +48,6 @@ public class Engine : MonoBehaviour
                     * data.HoverForce
                     * (1f - (hit.distance / data.HoverHeight)),
                     currentHoverPoint.transform.position);
-                if(x == 0)
-                    Debug.Log(hit.transform.gameObject.name + " / " + data.HoverHeight);
             }
             else
             {

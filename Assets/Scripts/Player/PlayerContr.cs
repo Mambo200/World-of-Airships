@@ -6,6 +6,10 @@ public class PlayerContr : MonoBehaviour
 {
     public AShip ControlledShip;
 
+    [SerializeField]
+    private UI_AUnit ingameUI;
+
+    [Header("X Axis Settings")]
     private float cam_X = 0;
     [SerializeField]
     private float cam_X_Speed = 10f;
@@ -14,28 +18,47 @@ public class PlayerContr : MonoBehaviour
     [SerializeField]
     private float cam_X_max = 1;
 
-
+    [Header("Y Axis Settings")]
     private float cam_Y = 0;
     [SerializeField]
     private float cam_Y_Speed = 10f;
+    [SerializeField]
+    private Transform cam_Anchor;
+
+    [Header("Zoom Settings")]
+    [SerializeField]
+    private Transform cam_zoom_cam;
+    [SerializeField]
+    private float cam_zoom_min;
+    [SerializeField]
+    private float cam_zoom_max;
+    [SerializeField]
+    private float cam_zoom_position;
+    [SerializeField]
+    private float cam_zoom_speed;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        GameManager.Instance.SetIngameMouse();
+        cam_zoom_cam.transform.localPosition = Vector3.forward * ((cam_zoom_max - cam_zoom_min) / 2);
+
+        ControlledShip.UI = ingameUI;
     }
 
     // Update is called once per frame
     void Update()
     {
         transform.position = ControlledShip.transform.position;
+        transform.eulerAngles = new Vector3(0, ControlledShip.transform.eulerAngles.y,0);
 
         ControlledShip.MoveShip(Input.GetAxis("Vertical"));
         ControlledShip.RotateShip(Input.GetAxis("Horizontal"));
 
         cam_X += Input.GetAxis("Mouse Y") * cam_X_Speed * Time.deltaTime;
-        cam_Y -= Input.GetAxis("Mouse X") * cam_Y_Speed * Time.deltaTime;
-        transform.eulerAngles = new Vector3(
+        cam_Y += Input.GetAxis("Mouse X") * cam_Y_Speed * Time.deltaTime;
+
+        cam_Anchor.localEulerAngles = new Vector3(
             Mathf.Clamp(cam_X, cam_X_min, cam_X_max)
             ,cam_Y,0);
         ControlledShip.RotateWeapon(cam_X, cam_Y);
@@ -43,6 +66,15 @@ public class PlayerContr : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             ControlledShip.Fire();
+        }
+
+        cam_zoom_position += Input.GetAxis("Mouse ScrollWheel") * cam_zoom_speed * Time.deltaTime;
+        cam_zoom_position = Mathf.Clamp(cam_zoom_position, cam_zoom_min, cam_zoom_max);
+        cam_zoom_cam.transform.localPosition = Vector3.forward * cam_zoom_position;
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ControlledShip.AddDamage(15f);
         }
     }
 }
