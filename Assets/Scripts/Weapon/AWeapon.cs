@@ -66,24 +66,39 @@ public abstract class AWeapon : MonoBehaviour
     {
         WeaponEnabled = false;
     }
+
+    public abstract WEAPONTYPE WeaponType { get; }
     #endregion
 
+    [Tooltip("Transform where the projectile will spawn after weapon shot")]
+    [SerializeField]
+    private Transform m_SpawnProjectileLocation;
+    /// <summary>
+    /// Projectile Spawn Transform
+    /// </summary>
+    public Transform SpawnProjectileTransform
+    {
+        get => m_SpawnProjectileLocation;
+    }
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        
+        if (SpawnProjectileTransform == null)
+        {
+            Debug.LogWarning("This object does not has an assigned SpawnProjectileLocation", this.gameObject);
+        }
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
-        if(CurrentShootCooldownTimer > 0)
+        if (CurrentShootCooldownTimer > 0)
         {
             // reloading
             CurrentShootCooldownTimer -= Mathf.Max(0, Time.deltaTime * CurrentShootCooldownMultiplier);
 
-            if(CurrentShootCooldownTimer == 0)
+            if (CurrentShootCooldownTimer == 0)
             {
                 // reloading weapon done
                 CanShootAgain();
@@ -143,11 +158,19 @@ public abstract class AWeapon : MonoBehaviour
     }
 
     /// <summary>
-    /// Shoot the weapon
+    /// Shoot the weapon. Do not forget to check <see cref="WeaponEnabled"/>
     /// </summary>
     public virtual void Shoot()
     {
-        CurrentShootCooldownTimer = ShootCooldownTime;
+        if (WeaponEnabled)
+        {
+            CurrentShootCooldownTimer = ShootCooldownTime;
+        }
     }
     #endregion
+}
+
+public enum WEAPONTYPE
+{
+    CANNON
 }
