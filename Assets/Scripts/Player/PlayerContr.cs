@@ -73,9 +73,8 @@ public class PlayerContr : MonoBehaviour
         cam_X += Input.GetAxis("Mouse Y") * cam_X_Speed * Time.deltaTime;
         cam_Y += Input.GetAxis("Mouse X") * cam_Y_Speed * Time.deltaTime;
 
-        cam_Anchor.localEulerAngles = new Vector3(
-            Mathf.Clamp(cam_X, cam_X_min, cam_X_max)
-            ,cam_Y,0);
+        cam_X = Mathf.Clamp(cam_X, cam_X_min, cam_X_max);
+        cam_Anchor.localEulerAngles = new Vector3(cam_X, cam_Y, 0);
         ControlledShip.RotateWeapon(cam_X, cam_Y);
 
         if (Input.GetMouseButtonDown(0))
