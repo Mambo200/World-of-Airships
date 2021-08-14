@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9eb24d86b94a85e4e85d7b911005d1a6, type: 3}
   m_Name: TowerData
   m_EditorClassIdentifier: 
-  m_RangeX: {x: -5, y: 5}
-  m_RangeY: {x: -10, y: 10}
-  m_WeaponCount: 4
+  m_RangeX: {x: -20, y: 20}
+  m_RangeY: {x: -50, y: 50}
