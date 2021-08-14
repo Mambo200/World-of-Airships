@@ -49,11 +49,11 @@ public abstract class AShip : MonoBehaviour
         set
         {
             hitpoints = value;
-            if(hitpoints > data.Hitpoints)
+            if (hitpoints > data.Hitpoints)
             {
                 hitpoints = data.Hitpoints;
             }
-            if(hitpoints <= 0)
+            if (hitpoints <= 0)
             {
                 //TODO: Lose Condition einbauen
             }
@@ -76,23 +76,24 @@ public abstract class AShip : MonoBehaviour
     public virtual void Start()
     {
         rigid = GetComponent<Rigidbody>();
-        if(rigid == null)
+        if (rigid == null)
         {
-            agent = GetComponent<NavMeshAgent>();
-            if(agent == null)
-            {
-                Debug.LogWarning("Schiff braucht ein Rigidbody oder NavmeshAgent");
-            }
+            Debug.LogWarning("Schiff braucht ein Rigidbody");
+        }
+        agent = GetComponent<NavMeshAgent>();
+        if (agent == null)
+        {
+            Debug.LogWarning("Schiff braucht ein Rigidbody oder NavmeshAgent");
         }
 
         engine.Init(this);
 
-        foreach(WeaponTower tower in GetComponentsInChildren<WeaponTower>())
+        foreach (WeaponTower tower in GetComponentsInChildren<WeaponTower>())
         {
             turrets.Add(tower);
         }
 
-        foreach(AWeapon weapon in GetComponentsInChildren<AWeapon>())
+        foreach (AWeapon weapon in GetComponentsInChildren<AWeapon>())
         {
             weapons.Add(weapon);
         }
@@ -104,13 +105,14 @@ public abstract class AShip : MonoBehaviour
     /// <param name="_dir">Richtung pos == vor und neg == zurück</param>
     public virtual void MoveShip(float _dir)
     {
-        if(rigid != null)
+        if (rigid != null)
         {
             engine.CurrentThrust = 0;
-            if(_dir > engine.Data.DeadZone)
+            if (_dir > engine.Data.DeadZone)
             {
                 engine.CurrentThrust = _dir * engine.Data.ForwardAcl;
-            }else if(_dir < -engine.Data.DeadZone)
+            }
+            else if (_dir < -engine.Data.DeadZone)
             {
                 engine.CurrentThrust = _dir * engine.Data.BackwardAcl;
             }
@@ -128,7 +130,7 @@ public abstract class AShip : MonoBehaviour
     /// <param name="_dir">Richtung</param>
     public virtual void RotateShip(float _dir)
     {
-        if(rigid != null)
+        if (rigid != null)
         {
             engine.CurrentTurn = 0;
             if (Mathf.Abs(_dir) > engine.Data.DeadZone)
@@ -148,7 +150,7 @@ public abstract class AShip : MonoBehaviour
     /// <param name="_y">Y Axis</param>
     public virtual void RotateWeapon(float _x, float _y)
     {
-        foreach(WeaponTower tower in turrets)
+        foreach (WeaponTower tower in turrets)
         {
             tower.RotateX(_x);
             tower.RotateY(_y);
@@ -158,15 +160,23 @@ public abstract class AShip : MonoBehaviour
 
     public virtual void Fire()
     {
-        foreach(AWeapon weapon in weapons)
+        foreach (AWeapon weapon in weapons)
         {
             weapon.Shoot();
         }
         //TODO: Weapon Fire
     }
 
-    public void MoveToPosition(Vector3 _pos)
+    /// <summary>
+    /// Move to Position via <see cref="NavMeshAgent"/>
+    /// </summary>
+    /// <param name="_pos">position to move to</param>
+    /// <returns>true if object reached its target; else false</returns>
+    public bool MoveToPosition(Vector3 _pos)
     {
         //TODO: Add Movement from navemeshAgent
+        agent.SetDestination(_pos);
+
+        return agent.remainingDistance <= agent.stoppingDistance;
     }
 }

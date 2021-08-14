@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class PlayerContr : MonoBehaviour
 {
+    public static PlayerContr m_instance;
+    public static PlayerContr Get
+    {
+        get => m_instance;
+    }
+
     public AShip ControlledShip;
 
     private float cam_X = 0;
@@ -18,7 +24,15 @@ public class PlayerContr : MonoBehaviour
     private float cam_Y = 0;
     [SerializeField]
     private float cam_Y_Speed = 10f;
-    
+
+    private void Awake()
+    {
+        if (m_instance == null)
+            m_instance = this;
+        else
+            Debug.LogWarning($"There are two instances of {nameof(PlayerContr)}. This instance was not applied!", this.gameObject);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
