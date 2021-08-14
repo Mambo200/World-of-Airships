@@ -1155,8 +1155,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ControlledShip: {fileID: 1410578673}
   cam_X_Speed: 10
-  cam_X_min: -10
-  cam_X_max: 40
+  cam_X_min: -45
+  cam_X_max: 45
   cam_Y_Speed: 10
 --- !u!4 &1164454616
 Transform:
@@ -1268,6 +1268,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1263921813}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1333935958 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6415046962366482506, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
+  m_PrefabInstance: {fileID: 1826700009849354886}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 316c04d9f4d66f8489d595e9643f30bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1383795967
 GameObject:
   m_ObjectHideFlags: 0
@@ -2350,21 +2361,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1826700009747223057, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
-      propertyPath: m_Layer
-      value: 6
+    - target: {fileID: 1244887328244254982, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
+      propertyPath: m_Name
+      value: Engine
       objectReference: {fileID: 0}
-    - target: {fileID: 1826700010907028418, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 1826700010942287443, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 1826700010950118706, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
-      propertyPath: m_Layer
-      value: 6
+    - target: {fileID: 1302627500514767520, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 1826700011125490290, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
       propertyPath: m_RootOrder
@@ -2376,7 +2379,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1826700011125490290, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 23.1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1826700011125490290, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2413,50 +2416,18 @@ PrefabInstance:
     - target: {fileID: 1826700011125490292, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
       propertyPath: m_Material
       value: 
-      objectReference: {fileID: 13400000, guid: 79b1067785b283447b121aeb7fca9fad, type: 2}
-    - target: {fileID: 1826700011125490293, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
-      propertyPath: m_Drag
-      value: 3
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 13400000, guid: 4ea9e66534b5460479247a7bb064dd89, type: 2}
     - target: {fileID: 1826700011125490293, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
       propertyPath: m_Mass
       value: 70
-      objectReference: {fileID: 0}
-    - target: {fileID: 1826700011125490293, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
-      propertyPath: m_AngularDrag
-      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1826700011125490294, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
       propertyPath: m_Name
       value: TestShip
       objectReference: {fileID: 0}
-    - target: {fileID: 1826700011125490294, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 1826700011125490295, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
-      propertyPath: forwardAcl
-      value: 10000
-      objectReference: {fileID: 0}
-    - target: {fileID: 1826700011125490295, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
-      propertyPath: hoverForce
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 1826700011125490295, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
-      propertyPath: backwardAcl
-      value: 2500
-      objectReference: {fileID: 0}
-    - target: {fileID: 1826700011125490295, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
-      propertyPath: hoverHeight
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1826700011125490295, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
-      propertyPath: turnStrength
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 1826700011189248101, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
+      propertyPath: engine
+      value: 
+      objectReference: {fileID: 1333935958}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0296c8a589c756c4aa8e994360fa0823, type: 3}
