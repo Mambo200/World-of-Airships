@@ -28,8 +28,7 @@ public class Cannon : AWeapon
     {
         base.Shoot();
         if (!WeaponEnabled) return;
-        GameObject go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        GameObject.Instantiate(go, SpawnProjectileTransform.position, SpawnProjectileTransform.rotation);
-        GameObject.Destroy(go);
+        AAmmo ammo = GameObject.Instantiate(ProjectileGameObject, SpawnProjectileTransform.position, SpawnProjectileTransform.rotation).GetComponent<AAmmo>();
+        ammo.GetRigidbody.AddForce(SpawnProjectileTransform.forward * ShootForce, ForceMode.VelocityChange);
     }
 }
