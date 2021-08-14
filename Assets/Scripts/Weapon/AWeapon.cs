@@ -46,6 +46,13 @@ public abstract class AWeapon : MonoBehaviour
     {
         get => m_ProjectileGameObject;
     }
+    [SerializeField]
+    private float m_ShootForce;
+    public float ShootForce
+    {
+        get => m_ShootForce;
+        protected set => m_ShootForce = value; 
+    }
 
     #region Weapon Status
     [Tooltip("Value for en- and disabling this weapon")]

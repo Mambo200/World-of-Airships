@@ -16,33 +16,60 @@ public abstract class AAmmo : MonoBehaviour
 
     private float CurrentLifeTime { get; set; }
 
+    protected virtual void Awake()
+    {
+        m_Ridigbody = GetComponent<Rigidbody>();
+    }
+
     protected virtual void Start()
     {
         if (m_AmmoData == null)
             Debug.LogWarning($"{nameof(m_AmmoData)} is null!", this.gameObject);
         CurrentLifeTime = m_AmmoData.LifeTime;
 
-        m_Ridigbody = GetComponent<Rigidbody>();
     }
     protected void Update()
     {
-        //TODO: Lifetime runterzählen.
         CurrentLifeTime -= Time.deltaTime;
 
         if(CurrentLifeTime <= 0)
+        {
+            Debug.Log($"{this} destroyes itself after {m_AmmoData.LifeTime} seconds.");
             DestroyProjectile();
-
-        Debug.Log(this.gameObject.transform.position, this.gameObject);
+        }
     }
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Kollidiert mit: " + collision.gameObject, collision.gameObject);
+        AShip ship = GetShip(collision.gameObject);
+        if(ship == null)
+        {
+            Debug.LogWarning($"{collision.gameObject} does not have a {nameof(AShip)}-Component.", collision.gameObject);
+            return;
+        }
+        ship.AddDamage(m_AmmoData.Damage);
         DestroyProjectile();
     }
 
     public virtual void DestroyProjectile()
     {
         Destroy(this.gameObject);
+    }
+
+    protected AShip GetShip(GameObject _hit)
+    {
+
+        GameObject go = _hit;
+
+        while(go != null)
+        {
+            AShip tr = go.GetComponent<AShip>();
+            if (tr != null)
+                return tr;
+            else
+                go = go.GetComponentInParent<GameObject>();
+        }
+
+        return null;
     }
 }

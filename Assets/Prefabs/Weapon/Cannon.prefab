@@ -172,6 +172,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_life: 10
   m_ProjectileGameObject: {fileID: 8224063279987256280, guid: a18f9e835f87f834b87908a46ea2c0bc, type: 3}
+  m_ShootForce: 30
   m_weaponEnabled: 1
   m_SpawnProjectileLocation: {fileID: 6765972581642832089}
   m_shootCooolDownTime: 5

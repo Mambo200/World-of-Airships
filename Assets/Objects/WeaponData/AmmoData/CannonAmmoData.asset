@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: CannonAmmoData
   m_EditorClassIdentifier: 
   m_Damage: 10
+  m_lifeTime: 10
