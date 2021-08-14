@@ -29,6 +29,8 @@ public abstract class AShip : MonoBehaviour
     [SerializeField]
     private Engine engine;
     [SerializeField]
+    private List<Pinwheels> pinewheels;
+    [SerializeField]
     private List<WeaponTower> turrets;
     [SerializeField]
     private List<AWeapon> weapons;
