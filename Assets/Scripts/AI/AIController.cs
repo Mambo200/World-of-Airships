@@ -24,7 +24,19 @@ public class AIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DoRotation();
+        bool reachedTarget = DoMovement();
+        //DoRotation();
+
+        if (reachedTarget)
+        {
+            DoShooting();
+        }
+            
+    }
+
+    private bool DoMovement()
+    {
+        return m_Ship.MoveToPosition(GetPlayer().ControlledShip.gameObject.transform.position);
     }
 
     private void DoRotation()
@@ -45,6 +57,10 @@ public class AIController : MonoBehaviour
 
     }
 
+    private void DoShooting()
+    {
+        //TODO: Shoot
+    }
 
 
     private PlayerContr GetPlayer()
