@@ -27,6 +27,8 @@ public abstract class AShip : MonoBehaviour
     private float hitpoints;
 
     [SerializeField]
+    private Engine engine;
+    [SerializeField]
     private List<WeaponTower> turrets;
     [SerializeField]
     private List<AWeapon> weapons;
@@ -58,32 +60,13 @@ public abstract class AShip : MonoBehaviour
 
     [Header("Hover Settings")]
     private Rigidbody rigid;
-    [SerializeField]
-    private float deadZone = 0.1f;
-
-    [SerializeField]
-    private float forwardAcl = 100f;
-    [SerializeField]
-    private float backwardAcl = 25f;
-    [SerializeField]
-    private float currentThrust = 0f;
-
-    [SerializeField]
-    private float turnStrength = 10f;
-    [SerializeField]
-    private float currentTurn = 0f;
-
-    [SerializeField]
-    private LayerMask IgnoreMask;
-    [SerializeField]
-    private float hoverForce = 9f;
-    [SerializeField]
-    private float hoverHeight = 2f;
-
-    [SerializeField]
-    private GameObject[] hoverPoints;
-
-    private GameObject currentHoverPoint;
+    public Rigidbody Rigid
+    {
+        get
+        {
+            return rigid;
+        }
+    }
 
     [Header("Navmesh Settings")]
     private NavMeshAgent agent;
@@ -100,7 +83,7 @@ public abstract class AShip : MonoBehaviour
             }
         }
 
-        IgnoreMask = ~IgnoreMask;
+        engine.Init(this);
 
         foreach(WeaponTower tower in GetComponentsInChildren<WeaponTower>())
         {
@@ -121,13 +104,13 @@ public abstract class AShip : MonoBehaviour
     {
         if(rigid != null)
         {
-            currentThrust = 0;
-            if(_dir > deadZone)
+            engine.CurrentThrust = 0;
+            if(_dir > engine.Data.DeadZone)
             {
-                currentThrust = _dir * forwardAcl;
-            }else if(_dir < -deadZone)
+                engine.CurrentThrust = _dir * engine.Data.ForwardAcl;
+            }else if(_dir < -engine.Data.DeadZone)
             {
-                currentThrust = _dir * backwardAcl;
+                engine.CurrentThrust = _dir * engine.Data.BackwardAcl;
             }
         }
         else
@@ -145,9 +128,9 @@ public abstract class AShip : MonoBehaviour
     {
         if(rigid != null)
         {
-            currentTurn = 0;
-            if (Mathf.Abs(_dir) > deadZone)
-                currentTurn = _dir;
+            engine.CurrentTurn = 0;
+            if (Mathf.Abs(_dir) > engine.Data.DeadZone)
+                engine.CurrentTurn = _dir;
         }
         else
         {
@@ -183,55 +166,5 @@ public abstract class AShip : MonoBehaviour
     public void MoveToPosition(Vector3 _pos)
     {
         //TODO: Add Movement from navemeshAgent
-    }
-
-    public virtual void FixedUpdate()
-    {
-        if(rigid != null)
-        {
-            RaycastHit hit;
-            for(int x = 0; x < hoverPoints.Length; x++)
-            {
-                currentHoverPoint = hoverPoints[x];
-                if(Physics.Raycast(currentHoverPoint.transform.position,
-                    -Vector3.up, out hit,
-                    hoverHeight,
-                    IgnoreMask))
-                {
-                    rigid.AddForceAtPosition(Vector3.up
-                        * hoverForce
-                        *  (1f - (hit.distance / hoverHeight)),
-                        currentHoverPoint.transform.position);
-                }
-                else
-                {
-                    if(transform.position.y > currentHoverPoint.transform.position.y)
-                    {
-                        rigid.AddForceAtPosition(currentHoverPoint.transform.up
-                            * hoverForce,
-                            currentHoverPoint.transform.position);
-                    }
-                    else
-                    {
-                        rigid.AddForceAtPosition(currentHoverPoint.transform.up
-                            * -hoverForce,
-                            currentHoverPoint.transform.position);
-                    }
-                }
-            }
-
-            if(Mathf.Abs(currentThrust) > 0)
-            {
-                rigid.AddForce(transform.forward * currentThrust);
-            }
-
-            if(currentTurn > 0)
-            {
-                rigid.AddRelativeTorque(Vector3.up * currentTurn * turnStrength);
-            }else if(currentTurn < 0)
-            {
-                rigid.AddRelativeTorque(Vector3.up * currentTurn * turnStrength);
-            }
-        }
     }
 }
