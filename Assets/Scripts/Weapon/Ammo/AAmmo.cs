@@ -2,17 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AAmmo : MonoBehaviour
+[RequireComponent(typeof(Rigidbody))]
+public abstract class AAmmo : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private Rigidbody m_Ridigbody;
+    public Rigidbody GetRigidbody
     {
-        
+        get => m_Ridigbody;
     }
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField]
+    private AmmoData m_AmmoData;
+
+    private float CurrentLifeTime { get; set; }
+
+    protected virtual void Start()
     {
-        
+        if (m_AmmoData == null)
+            Debug.LogWarning($"{nameof(m_AmmoData)} is null!", this.gameObject);
+        CurrentLifeTime = m_AmmoData.LifeTime;
+
+        m_Ridigbody = GetComponent<Rigidbody>();
+    }
+    protected void Update()
+    {
+        //TODO: Lifetime runterzählen.
+        CurrentLifeTime -= Time.deltaTime;
+
+        if(CurrentLifeTime <= 0)
+            DestroyProjectile();
+
+        Debug.Log(this.gameObject.transform.position, this.gameObject);
+    }
+
+    protected virtual void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Kollidiert mit: " + collision.gameObject, collision.gameObject);
+        DestroyProjectile();
+    }
+
+    public virtual void DestroyProjectile()
+    {
+        Destroy(this.gameObject);
     }
 }
