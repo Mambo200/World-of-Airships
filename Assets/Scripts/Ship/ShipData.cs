@@ -32,6 +32,15 @@ public class ShipData : ScriptableObject
             return hitpoints;
         }
     }
+    [SerializeField]
+    private float energiepoints;
+    public float Energierpoints
+    {
+        get
+        {
+            return energiepoints;
+        }
+    }
 }
 
 public enum ShipType
