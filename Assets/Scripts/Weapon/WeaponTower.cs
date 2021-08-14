@@ -12,6 +12,11 @@ public class WeaponTower : MonoBehaviour
     [SerializeField]
     private WeaponTowerData m_WeaponTowerData;
 
+    [SerializeField]
+    private Transform[] m_WeaponSpawnTransform;
+    [SerializeField]
+    private WeaponPrefabsData m_WeaponPrefabsData;
+
     /// <summary>
     /// Placed weapon on this tower
     /// </summary>
@@ -24,8 +29,66 @@ public class WeaponTower : MonoBehaviour
     }
     public bool IsTowerFull
     {
-        get => AmountAttachedWeapons == m_WeaponTowerData.WeaponCount;
+        get => AmountAttachedWeapons == AttachedWeapons.Length;
     }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        if (m_WeaponTowerData == null)
+            Debug.LogWarning("m_WeaponTowerData is null");
+
+        if (m_WeaponSpawnTransform == null)
+            Debug.LogWarning($"{nameof(m_WeaponSpawnTransform)} is null.", this.gameObject);
+
+        for (int i = 0; i < m_WeaponSpawnTransform.Length; i++)
+        {
+            if(m_WeaponSpawnTransform[i] == null)
+                Debug.LogWarning($"{nameof(m_WeaponSpawnTransform)} at index {i.ToString()} is null.", this.gameObject);
+        }
+
+        AttachedWeapons = new AWeapon[m_WeaponSpawnTransform.Length];
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        Vector3 yRotation = m_RotationTransformY.eulerAngles;
+        float rotationAdd = Time.deltaTime * 30f;
+        if (Input.GetKey(KeyCode.A))
+            //left
+            RotateY(
+                yRotation.y - rotationAdd
+            );
+        else if (Input.GetKey(KeyCode.D))
+            //right
+            RotateY(
+                yRotation.y + rotationAdd
+            );
+        rotationAdd = Time.deltaTime * 15;
+        if (Input.GetKey(KeyCode.W))
+            //up
+            RotateX(
+                m_RotationTransformX.eulerAngles.x - rotationAdd
+            );
+        else if (Input.GetKey(KeyCode.S))
+            //up
+            RotateX(
+                m_RotationTransformX.eulerAngles.x + rotationAdd
+            );
+
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            //add
+            PlaceWeapon(WEAPONTYPE.CANNON);
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            //remove
+            RemoveLatestWeapon(out _);
+        }
+    }
+
 
     /// <summary>
     /// Check if weapon is placed at index
@@ -52,75 +115,73 @@ public class WeaponTower : MonoBehaviour
         return false;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        if (m_WeaponTowerData == null)
-            Debug.LogWarning("m_WeaponTowerData is null");
-
-        AttachedWeapons = new AWeapon[m_WeaponTowerData.WeaponCount];
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        Vector3 yRotation = m_RotationTransformY.eulerAngles;
-        float rotationAdd = Time.deltaTime * 30f;
-        if (Input.GetKey(KeyCode.A))
-            //left
-            RotateY(
-                yRotation.y - rotationAdd
-            );
-        else if(Input.GetKey(KeyCode.D))
-            //right
-            RotateY(
-                yRotation.y + rotationAdd
-            );
-        rotationAdd = Time.deltaTime * 15;
-        if (Input.GetKey(KeyCode.W))
-            //up
-            RotateX(
-                m_RotationTransformX.eulerAngles.x - rotationAdd
-            );
-        else if (Input.GetKey(KeyCode.S))
-            //up
-            RotateX(
-                m_RotationTransformX.eulerAngles.x + rotationAdd
-            );
-
-    }
-
+    #region Place, create and remove weapon
     /// <summary>
     /// Place Weapon
     /// </summary>
-    /// <param name="_weapon"></param>
+    /// <param name="_weapon">weapon to place</param>
     /// <returns></returns>
-    public bool PlaceWeapon(AWeapon _weapon)
+    [System.Obsolete("This Method does not work properly. Please use () instead.", true)]
+    public int PlaceWeapon(AWeapon _weapon)
     {
         if (IsTowerFull)
         {
             Debug.LogWarning("You tried to add a Weapon to this Tower, but it already has a weapon attached", this.gameObject);
-            return false;
+            return -1;
         }
         // get free Index
         int towerIndex = GetFirstFreeIndex();
         if(towerIndex < 0)
         {
             Debug.Log("TowerIndex was -1, but it seems like tower is not full. Please check!", this.gameObject);
-            return false;
+            return -1;
         }
 
         m_AmountAttachedWeapons++;
 
         //TODO: Create Weapon in Tower?
         AttachedWeapons[towerIndex] = _weapon;
-        return true;
+        return towerIndex;
     }
 
     /// <summary>
-    /// Remove weapon
+    /// Create and place weapon in <see cref="AttachedWeapons"/>.
     /// </summary>
-    /// <param name="_index">weapon to remove</param>
+    /// <param name="_type">weapon type</param>
+    /// <returns>index of weapon in <see cref="AttachedWeapons"/>. If failed to add, return -1.</returns>
+    public int PlaceWeapon(WEAPONTYPE _type)
+    {
+        int index = GetFirstFreeIndex();
+
+        if (index < 0)
+            return -1;
+
+        AWeapon w = CreateWeapon(_type, index);
+
+        AttachedWeapons[index] = w;
+
+        m_AmountAttachedWeapons++;
+        return index;
+    }
+
+    /// <summary>
+    /// Instatciate weapon
+    /// </summary>
+    /// <param name="_type">weapon type</param>
+    /// <param name="_index">spawn index for <see cref="m_WeaponSpawnTransform"/></param>
+    /// <returns><see cref="AWeapon"/> component of spawned gameObject</returns>
+    private AWeapon CreateWeapon(WEAPONTYPE _type, int _index)
+    {
+        GameObject go = GameObject.Instantiate(m_WeaponPrefabsData.GameObjectCannonPrefab, m_WeaponSpawnTransform[_index]);
+        AWeapon to = go.GetComponent<AWeapon>();
+
+        return to;
+    }
+
+    /// <summary>
+    /// Remove and destroy weapon
+    /// </summary>
+    /// <param name="_weapon">weapon to remove</param>
     /// <returns>true if weapon was removed; else false</returns>
     public bool RemoveWeapon(AWeapon _weapon)
     {
@@ -138,20 +199,75 @@ public class WeaponTower : MonoBehaviour
             return false;
 
         // remove
+        GameObject.Destroy(AttachedWeapons[index].gameObject);
         AttachedWeapons[index] = null;
 
+        m_AmountAttachedWeapons--;
         return true;
     }
 
     /// <summary>
-    /// Remove weapon at index
+    /// Remove and destroy weapon
     /// </summary>
-    /// <param name="_index">index</param>
+    /// <param name="_index">weapon to remove</param>
     /// <returns>true if weapon was removed; else false</returns>
     public bool RemoveWeapon(int _index)
     {
-        return false;
+        if (_index < 0)
+            return false;
+
+        // remove
+        GameObject.Destroy(AttachedWeapons[_index].gameObject);
+        AttachedWeapons[_index] = null;
+
+        m_AmountAttachedWeapons--;
+        return true;
     }
+
+    /// <summary>
+    /// Remove latest weapon
+    /// </summary>
+    /// <returns>true if weapon was removed; else false</returns>
+    public bool RemoveLatestWeapon(out int _removedIndex)
+    {
+        _removedIndex = -1;
+        for (int i = AttachedWeapons.Length - 1; i >= 0; i--)
+        {
+            if(AttachedWeapons[i] != null)
+            {
+                _removedIndex = i;
+                break;
+            }
+        }
+
+        if (_removedIndex < 0)
+            return false;
+        return RemoveWeapon(_removedIndex);
+    }
+
+    /// <summary>
+    /// Remove latest weapon
+    /// </summary>
+    /// <returns>true if weapon was removed; else false</returns>
+    public bool RemoveFirstWeapon(out int _removedIndex)
+    {
+        _removedIndex = -1;
+        for (int i = 0; i < AttachedWeapons.Length; i++)
+        {
+            if (AttachedWeapons[i] != null)
+            {
+                _removedIndex = i;
+                break;
+            }
+
+        }
+
+        if (_removedIndex < 0)
+            return false;
+        return RemoveWeapon(_removedIndex);
+    }
+    #endregion
+
     /// <summary>
     /// Get first index with null in <<see cref="AttachedWeapons"/>.
     /// </summary>

@@ -25,13 +25,4 @@ public class WeaponTowerData : ScriptableObject
         }
     }
 
-
-
-    [SerializeField]
-    private int m_WeaponCount;
-    public int WeaponCount
-    {
-        get { return m_WeaponCount; }
-    }
-
 }
