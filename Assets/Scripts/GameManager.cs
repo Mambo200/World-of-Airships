@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        SetIngameMouse();
     }
 
     // Update is called once per frame
@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
 
     public void ActivateLoseCondition()
     {
+        SetMenuMouse();
         SceneManager.LoadScene(LoseScene);
     }
 
@@ -59,6 +60,7 @@ public class GameManager : MonoBehaviour
 
         if (livingEnemys.Count <= 0)
         {
+            SetMenuMouse();
             SceneManager.LoadScene(WinScene);
         }
     }

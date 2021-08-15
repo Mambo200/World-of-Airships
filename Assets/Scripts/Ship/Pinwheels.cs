@@ -10,6 +10,14 @@ public class Pinwheels : MonoBehaviour
     [SerializeField]
     private PinewheelData data;
 
+    public PinewheelData Data
+    {
+        get
+        {
+            return data;
+        }
+    }
+
     private Transform wheelposition;
 
     public float ProducedEnergie
