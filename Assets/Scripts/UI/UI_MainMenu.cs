@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UI_MainMenu : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class UI_MainMenu : MonoBehaviour
     private GameObject win_controll;
     [SerializeField]
     private GameObject win_credits;
+
+    public string Level0 = "";
 
     private void Start()
     {
@@ -41,5 +44,10 @@ public class UI_MainMenu : MonoBehaviour
     public void bttn_Exit_Click()
     {
         Application.Quit();
+    }
+
+    public void bttn_LoadLevelOne_Click()
+    {
+        SceneManager.LoadScene(Level0);
     }
 }
