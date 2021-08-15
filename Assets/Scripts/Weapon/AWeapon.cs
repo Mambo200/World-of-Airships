@@ -111,6 +111,7 @@ public abstract class AWeapon : MonoBehaviour
     {
         if (CurrentShootCooldownTimer > 0)
         {
+            //Debug.Log(controlledShip.Modifire);
             // reloading
             CurrentShootCooldownTimer -= Time.deltaTime * controlledShip.Modifire;
 
