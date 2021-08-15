@@ -15,6 +15,6 @@ MonoBehaviour:
   deadZone: 0.1
   forwardAcl: 10000
   backwardAcl: 2500
-  turnStrength: 1000
+  turnStrength: 1500
   hoverForce: 900
   hoverHeight: 6
