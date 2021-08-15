@@ -10,6 +10,8 @@ public class PlayerContr : MonoBehaviour
         get => m_instance;
     }
 
+    private WeaponTower[] WeaponTowers { get; set; }
+
     public AShip ControlledShip;
 
     [SerializeField]
@@ -60,6 +62,15 @@ public class PlayerContr : MonoBehaviour
 
         ControlledShip.UI = ingameUI;
         ControlledShip.IsPlayer = true;
+
+        WeaponTowers = ControlledShip.GetComponentsInChildren<WeaponTower>();
+
+        foreach (WeaponTower t in WeaponTowers)
+        {
+            t.PlaceWeapon(WEAPONTYPE.CANNON, ControlledShip);
+            t.PlaceWeapon(WEAPONTYPE.CANNON, ControlledShip);
+            t.PlaceWeapon(WEAPONTYPE.CANNON, ControlledShip);
+        }
     }
 
     // Update is called once per frame
@@ -80,16 +91,19 @@ public class PlayerContr : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            ControlledShip.Fire();
+            foreach (WeaponTower tower in WeaponTowers)
+            {
+                AWeapon[] weapons = tower.CurrentAttachedWeapons;
+
+                foreach (AWeapon weapon in weapons)
+                {
+                    weapon.Shoot();
+                }
+            }
         }
 
         cam_zoom_position += Input.GetAxis("Mouse ScrollWheel") * cam_zoom_speed * Time.deltaTime;
         cam_zoom_position = Mathf.Clamp(cam_zoom_position, cam_zoom_min, cam_zoom_max);
         cam_zoom_cam.transform.localPosition = Vector3.forward * cam_zoom_position;
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            ControlledShip.AddDamage(15f);
-        }
     }
 }

@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public string LoseScene = "Lose";
     public string WinScene = "WinScene";
 
-    private List<AShip> livingEnemys = new List<AShip>();
+    public List<AShip> livingEnemys = new List<AShip>();
 
     private void Awake()
     {

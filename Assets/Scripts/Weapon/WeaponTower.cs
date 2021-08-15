@@ -48,7 +48,7 @@ public class WeaponTower : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         if (m_WeaponTowerData == null)
             Debug.LogWarning("m_WeaponTowerData is null");
@@ -167,7 +167,7 @@ public class WeaponTower : MonoBehaviour
     /// </summary>
     /// <param name="_type">weapon type</param>
     /// <returns>index of weapon in <see cref="AttachedWeapons"/>. If failed to add, return -1.</returns>
-    public int PlaceWeapon(WEAPONTYPE _type)
+    public int PlaceWeapon(WEAPONTYPE _type, AShip _ship)
     {
         int index = GetFirstFreeIndex();
 
@@ -175,7 +175,7 @@ public class WeaponTower : MonoBehaviour
             return -1;
 
         AWeapon w = CreateWeapon(_type, index);
-
+        w.Init(_ship);
         AttachedWeapons[index] = w;
 
         m_AmountAttachedWeapons++;
@@ -301,6 +301,11 @@ public class WeaponTower : MonoBehaviour
     /// <returns>first index with no weapon. If full return -1</returns>
     public int GetFirstFreeIndex()
     {
+        if(AttachedWeapons == null)
+        {
+
+        }
+
         for (int i = 0; i < AttachedWeapons.Length; i++)
         {
             if (AttachedWeapons[i] == null)

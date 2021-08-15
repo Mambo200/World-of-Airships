@@ -12,6 +12,11 @@ public abstract class AShip : MonoBehaviour
     public bool IsPlayer = false;
     private AIController aiController;
 
+    public void Init(AIController _controller)
+    {
+        aiController = _controller;
+    }
+
     private UI_AUnit ui;
     public UI_AUnit UI
     {
@@ -100,7 +105,7 @@ public abstract class AShip : MonoBehaviour
             }
 
             if (ui != null)
-                ui.SetEnergiebar(energiepoints, data.Energierpoints);
+                ui.SetEnergiebar(energiepoints, maxEnergie);
 
             if(energiepoints < 0)
             {
@@ -133,6 +138,7 @@ public abstract class AShip : MonoBehaviour
     private List<WeaponTower> turrets;
     [SerializeField]
     private List<AWeapon> weapons;
+
 
     [Header("Hover Settings")]
     private Rigidbody rigid;
