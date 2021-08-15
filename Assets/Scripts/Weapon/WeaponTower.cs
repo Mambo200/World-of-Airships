@@ -58,7 +58,7 @@ public class WeaponTower : MonoBehaviour
 
         for (int i = 0; i < m_WeaponSpawnTransform.Length; i++)
         {
-            if(m_WeaponSpawnTransform[i] == null)
+            if (m_WeaponSpawnTransform[i] == null)
                 Debug.LogWarning($"{nameof(m_WeaponSpawnTransform)} at index {i.ToString()} is null.", this.gameObject);
         }
 
@@ -68,40 +68,44 @@ public class WeaponTower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 yRotation = m_RotationTransformY.eulerAngles;
-        float rotationAdd = Time.deltaTime * 30f;
-        if (Input.GetKey(KeyCode.A))
-            //left
-            RotateY(
-                yRotation.y - rotationAdd
-            );
-        else if (Input.GetKey(KeyCode.D))
-            //right
-            RotateY(
-                yRotation.y + rotationAdd
-            );
-        rotationAdd = Time.deltaTime * 15;
-        if (Input.GetKey(KeyCode.W))
-            //up
-            RotateX(
-                m_RotationTransformX.eulerAngles.x - rotationAdd
-            );
-        else if (Input.GetKey(KeyCode.S))
-            //up
-            RotateX(
-                m_RotationTransformX.eulerAngles.x + rotationAdd
-            );
+        #region DEBUG
+        //Vector3 yRotation = m_RotationTransformY.eulerAngles;
+        //float rotationAdd = Time.deltaTime * 30f;
+        //if (Input.GetKey(KeyCode.A))
+        //    //left
+        //    RotateY(
+        //        yRotation.y - rotationAdd
+        //    );
+        //else if (Input.GetKey(KeyCode.D))
+        //    //right
+        //    RotateY(
+        //        yRotation.y + rotationAdd
+        //    );
+        //rotationAdd = Time.deltaTime * 15;
+        //if (Input.GetKey(KeyCode.W))
+        //    //up
+        //    RotateX(
+        //        m_RotationTransformX.eulerAngles.x - rotationAdd
+        //    );
+        //else if (Input.GetKey(KeyCode.S))
+        //    //up
+        //    RotateX(
+        //        m_RotationTransformX.eulerAngles.x + rotationAdd
+        //    );
+        //
+        //if (Input.GetKeyDown(KeyCode.Keypad1))
+        //{
+        //    //add
+        //    PlaceWeapon(WEAPONTYPE.CANNON);
+        //}
+        //if (Input.GetKeyDown(KeyCode.Keypad2))
+        //{
+        //    //remove
+        //    RemoveLatestWeapon(out _);
+        //}
+        #endregion
 
-        if (Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            //add
-            PlaceWeapon(WEAPONTYPE.CANNON);
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad2))
-        {
-            //remove
-            RemoveLatestWeapon(out _);
-        }
+
     }
 
 
@@ -146,7 +150,7 @@ public class WeaponTower : MonoBehaviour
         }
         // get free Index
         int towerIndex = GetFirstFreeIndex();
-        if(towerIndex < 0)
+        if (towerIndex < 0)
         {
             Debug.Log("TowerIndex was -1, but it seems like tower is not full. Please check!", this.gameObject);
             return -1;
@@ -218,7 +222,7 @@ public class WeaponTower : MonoBehaviour
             }
         }
 
-        if(index < 0)
+        if (index < 0)
             return false;
 
         // remove
@@ -256,7 +260,7 @@ public class WeaponTower : MonoBehaviour
         _removedIndex = -1;
         for (int i = AttachedWeapons.Length - 1; i >= 0; i--)
         {
-            if(AttachedWeapons[i] != null)
+            if (AttachedWeapons[i] != null)
             {
                 _removedIndex = i;
                 break;
@@ -314,7 +318,7 @@ public class WeaponTower : MonoBehaviour
     {
         _newValue = ConvertIn180Space(_newValue);
         _newValue = CheckMinMaxRotation(_newValue, m_WeaponTowerData.RangeX);
-        
+
         Vector3 finalRotationX = new Vector3(_newValue, m_RotationTransformX.eulerAngles.y, m_RotationTransformX.eulerAngles.z);
         m_RotationTransformX.rotation = Quaternion.Euler(finalRotationX);
     }
