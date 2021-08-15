@@ -24,11 +24,14 @@ public class Cannon : AWeapon
         }
     }
 
-    public override void Shoot()
+    public override bool Shoot()
     {
-        base.Shoot();
-        if (!WeaponEnabled) return;
+        if(!base.Shoot()) return false;
+        //Debug.Log($"{nameof(WeaponEnabled)} ==> {WeaponEnabled} || {nameof(CanShoot)} ==> {CanShoot}");
+
         AAmmo ammo = GameObject.Instantiate(ProjectileGameObject, SpawnProjectileTransform.position, SpawnProjectileTransform.rotation).GetComponent<AAmmo>();
         ammo.GetRigidbody.AddForce(SpawnProjectileTransform.forward * ShootForce, ForceMode.VelocityChange);
+
+        return true;
     }
 }

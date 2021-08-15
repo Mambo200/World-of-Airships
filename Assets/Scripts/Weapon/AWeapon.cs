@@ -107,6 +107,7 @@ public abstract class AWeapon : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
+        Debug.Log(CurrentShootCooldownTimer);
         if (CurrentShootCooldownTimer > 0)
         {
             // reloading
@@ -174,12 +175,17 @@ public abstract class AWeapon : MonoBehaviour
     /// <summary>
     /// Shoot the weapon. Do not forget to check <see cref="WeaponEnabled"/>
     /// </summary>
-    public virtual void Shoot()
+    public virtual bool Shoot()
     {
-        if (WeaponEnabled)
+        if (WeaponEnabled
+            && CanShoot)
         {
             CurrentShootCooldownTimer = ShootCooldownTime;
+
+            return true;
         }
+
+        return false;
     }
     #endregion
 }
