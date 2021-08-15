@@ -180,7 +180,6 @@ public abstract class AShip : MonoBehaviour
         {
             Debug.LogWarning("Beim Schiff fehlt der Rigidbody");
         }
-        //TODO: Move Ship
     }
 
     /// <summary>
@@ -199,7 +198,6 @@ public abstract class AShip : MonoBehaviour
         {
             Debug.LogWarning("Beim Schiff fehlt der Rigidbody");
         }
-        //TODO: Rotate Ship
     }
 
     /// <summary>
@@ -214,7 +212,6 @@ public abstract class AShip : MonoBehaviour
             tower.RotateX(_x);
             tower.RotateY(_y);
         }
-        //TODO: Rotate WeaponTower
     }
 
     public virtual void Fire()
@@ -223,7 +220,6 @@ public abstract class AShip : MonoBehaviour
         {
             weapon.Shoot();
         }
-        //TODO: Weapon Fire
     }
 
     /// <summary>

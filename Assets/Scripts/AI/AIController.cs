@@ -12,19 +12,30 @@ public class AIController : MonoBehaviour
     [SerializeField]
     public float m_RotateDirection;
 
+    /// <summary>
+    /// All Towers attached to <see cref="m_Ship"/>.
+    /// </summary>
+    private WeaponTower[] WeaponTowers { get; set; }
+
     // Start is called before the first frame update
     void Start()
     {
         if (m_Ship == null)
             Debug.LogError($"{nameof(m_Ship)} is null!");
 
-        //m_Ship.RotateShip(100);
+        WeaponTowers = m_Ship.GetComponentsInChildren<WeaponTower>();
+
+        foreach (WeaponTower wt in WeaponTowers)
+        {
+            wt.PlaceWeapon(WEAPONTYPE.CANNON);
+            wt.PlaceWeapon(WEAPONTYPE.CANNON);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        bool reachedTarget = DoMovement();
+        bool reachedTarget = DoMovementShip();
         //DoRotation();
 
         if (reachedTarget)
@@ -34,12 +45,12 @@ public class AIController : MonoBehaviour
             
     }
 
-    private bool DoMovement()
+    private bool DoMovementShip()
     {
         return m_Ship.MoveToPosition(GetPlayer().ControlledShip.gameObject.transform.position);
     }
 
-    private void DoRotation()
+    private void DoRotationShip()
     {
         Transform LookAtEnemy = PlayerContr.Get.ControlledShip.gameObject.transform;  // Who is the enemy?
 
@@ -59,7 +70,22 @@ public class AIController : MonoBehaviour
 
     private void DoShooting()
     {
+        foreach (WeaponTower tower in WeaponTowers)
+        {
+            AWeapon[] weapons = tower.CurrentAttachedWeapons;
+
+            foreach (AWeapon w in weapons)
+            {
+                if (w.WeaponEnabled)
+                    w.Shoot();
+            }
+        }
         //TODO: Shoot
+    }
+
+    private void DoRotationCannon()
+    {
+
     }
 
 
