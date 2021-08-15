@@ -42,7 +42,7 @@ public class AIController : MonoBehaviour
         {
             DoShooting();
         }
-            
+
     }
 
     private bool DoMovementShip()
@@ -89,11 +89,6 @@ public class AIController : MonoBehaviour
             }
         }
         //TODO: Shoot
-    }
-
-    private void DoRotationCannon()
-    {
-
     }
 
 
