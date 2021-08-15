@@ -27,16 +27,19 @@ public class AIController : MonoBehaviour
 
         foreach (WeaponTower wt in WeaponTowers)
         {
-            wt.PlaceWeapon(WEAPONTYPE.CANNON);
-            wt.PlaceWeapon(WEAPONTYPE.CANNON);
+            wt.PlaceWeapon(WEAPONTYPE.CANNON, m_Ship);
+            wt.PlaceWeapon(WEAPONTYPE.CANNON, m_Ship);
         }
+
+        GameManager.Instance.livingEnemys.Add(this.m_Ship);
+        m_Ship.Init(this);
     }
 
     // Update is called once per frame
     void Update()
     {
         bool reachedTarget = DoMovementShip();
-        Debug.Log(DoRotationShip());
+        DoRotationShip();
 
         if (reachedTarget)
         {
