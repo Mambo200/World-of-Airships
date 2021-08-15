@@ -76,7 +76,7 @@ public class PlayerContr : MonoBehaviour
 
         cam_X = Mathf.Clamp(cam_X, cam_X_min, cam_X_max);
         cam_Anchor.localEulerAngles = new Vector3(cam_X, cam_Y, 0);
-        ControlledShip.RotateWeapon(cam_X, cam_Anchor.transform.rotation.y);
+        ControlledShip.RotateWeapon(cam_X, cam_Anchor.transform.eulerAngles.y);
 
         if (Input.GetMouseButtonDown(0))
         {
