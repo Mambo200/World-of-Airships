@@ -5,8 +5,11 @@ using UnityEngine.AI;
 
 public abstract class AShip : MonoBehaviour
 {
+    [Header("Shipsettings")]
     [SerializeField]
     private ShipData data;
+
+    public bool IsPlayer = false;
 
     private UI_AUnit ui;
     public UI_AUnit UI
@@ -65,7 +68,14 @@ public abstract class AShip : MonoBehaviour
             if (hitpoints <= 0)
             {
                 hitpoints = 0;
-                GameManager.Instance.ActivateLoseCondition();
+                if (IsPlayer)
+                {
+                    GameManager.Instance.ActivateLoseCondition();
+                }
+                else
+                {
+                    GameManager.Instance.RemoveEnemyShip(this);
+                }
             }
         }
     }

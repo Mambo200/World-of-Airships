@@ -45,4 +45,9 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Du hast das Spiel verloren");
     }
+
+    public void RemoveEnemyShip(AShip _ship)
+    {
+
+    }
 }
