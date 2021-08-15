@@ -139,7 +139,6 @@ public class WeaponTower : MonoBehaviour
 
         m_AmountAttachedWeapons++;
 
-        //TODO: Create Weapon in Tower?
         AttachedWeapons[towerIndex] = _weapon;
         return towerIndex;
     }

@@ -5,8 +5,24 @@ using UnityEngine.AI;
 
 public abstract class AShip : MonoBehaviour
 {
+    [Header("Shipsettings")]
     [SerializeField]
     private ShipData data;
+
+    public bool IsPlayer = false;
+
+    private UI_AUnit ui;
+    public UI_AUnit UI
+    {
+        get
+        {
+            return ui;
+        }
+        set
+        {
+            ui = value;
+        }
+    }
 
     public string ClassName
     {
@@ -26,15 +42,6 @@ public abstract class AShip : MonoBehaviour
 
     private float hitpoints;
 
-    [SerializeField]
-    private Engine engine;
-    [SerializeField]
-    private List<Pinwheels> pinewheels;
-    [SerializeField]
-    private List<WeaponTower> turrets;
-    [SerializeField]
-    private List<AWeapon> weapons;
-
     /// <summary>
     /// Sind die Aktuellen Hitpoints des Schiffs
     /// Begrenzt automatisch beim Maximum
@@ -49,16 +56,63 @@ public abstract class AShip : MonoBehaviour
         set
         {
             hitpoints = value;
+
             if (hitpoints > data.Hitpoints)
             {
                 hitpoints = data.Hitpoints;
             }
+
+            if (ui != null)
+                ui.SetHealthbar(hitpoints, data.Hitpoints);
+
             if (hitpoints <= 0)
             {
-                //TODO: Lose Condition einbauen
+                hitpoints = 0;
+                if (IsPlayer)
+                {
+                    GameManager.Instance.ActivateLoseCondition();
+                }
+                else
+                {
+                    GameManager.Instance.RemoveEnemyShip(this);
+                }
             }
         }
     }
+
+    private float energiepoints;
+    public float Energiepoints
+    {
+        get
+        {
+            return energiepoints;
+        }
+        set
+        {
+            energiepoints = value;
+            if(energiepoints > data.Energierpoints)
+            {
+                energiepoints = data.Energierpoints;
+            }
+
+            if (ui != null)
+                ui.SetEnergiebar(energiepoints, data.Energierpoints);
+
+            if(energiepoints < 0)
+            {
+                energiepoints = 0;
+            }
+        }
+    }
+
+    [SerializeField]
+    private Engine engine;
+    [SerializeField]
+    private List<Pinwheels> pinewheels;
+    [SerializeField]
+    private List<WeaponTower> turrets;
+    [SerializeField]
+    private List<AWeapon> weapons;
 
     [Header("Hover Settings")]
     private Rigidbody rigid;
@@ -85,6 +139,9 @@ public abstract class AShip : MonoBehaviour
         {
             Debug.LogWarning("Schiff braucht ein Rigidbody oder NavmeshAgent");
         }
+
+        Hitpoints = data.Hitpoints;
+        Energiepoints = data.Energierpoints;
 
         engine.Init(this);
 
@@ -178,5 +235,10 @@ public abstract class AShip : MonoBehaviour
         agent.SetDestination(_pos);
 
         return agent.remainingDistance <= agent.stoppingDistance;
+    }
+
+    public virtual void AddDamage(float _damage)
+    {
+        Hitpoints -= _damage;
     }
 }
