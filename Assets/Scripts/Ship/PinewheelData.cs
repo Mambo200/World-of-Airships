@@ -14,4 +14,14 @@ public class PinewheelData : ScriptableObject
             return height;
         }
     }
+
+    [SerializeField]
+    private float maxEnergie;
+    public float MaxEnergie
+    {
+        get
+        {
+            return maxEnergie;
+        }
+    }
 }
