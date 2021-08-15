@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: TowerData
   m_EditorClassIdentifier: 
   m_RangeX: {x: -20, y: 20}
-  m_RangeY: {x: -50, y: 50}
+  m_RangeY: {x: -1e+14, y: 3.4028235e+38}

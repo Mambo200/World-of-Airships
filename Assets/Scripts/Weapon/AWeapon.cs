@@ -107,7 +107,6 @@ public abstract class AWeapon : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        Debug.Log(CurrentShootCooldownTimer);
         if (CurrentShootCooldownTimer > 0)
         {
             // reloading

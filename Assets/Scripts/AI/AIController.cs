@@ -36,13 +36,13 @@ public class AIController : MonoBehaviour
     void Update()
     {
         bool reachedTarget = DoMovementShip();
-        //DoRotation();
+        Debug.Log(DoRotationShip());
 
         if (reachedTarget)
         {
             DoShooting();
         }
-            
+
     }
 
     private bool DoMovementShip()
@@ -50,7 +50,11 @@ public class AIController : MonoBehaviour
         return m_Ship.MoveToPosition(GetPlayer().ControlledShip.gameObject.transform.position);
     }
 
-    private void DoRotationShip()
+    /// <summary>
+    /// Rotate the ship
+    /// </summary>
+    /// <returns>true if ship looks at player; else false</returns>
+    private bool DoRotationShip()
     {
         Transform LookAtEnemy = PlayerContr.Get.ControlledShip.gameObject.transform;  // Who is the enemy?
 
@@ -60,10 +64,14 @@ public class AIController : MonoBehaviour
 
         if (rotationLeft <= 5
             && rotationLeft >= -5)
+        {
             m_Ship.RotateShip(0);
+            return true;
+        }
         else
         {
             m_Ship.RotateShip(Mathf.Clamp(rotationLeft, -1, 1));
+            return false;
         }
 
     }
@@ -81,11 +89,6 @@ public class AIController : MonoBehaviour
             }
         }
         //TODO: Shoot
-    }
-
-    private void DoRotationCannon()
-    {
-
     }
 
 
