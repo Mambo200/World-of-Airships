@@ -10,6 +10,7 @@ public abstract class AShip : MonoBehaviour
     private ShipData data;
 
     public bool IsPlayer = false;
+    private AIController aiController;
 
     private UI_AUnit ui;
     public UI_AUnit UI
@@ -74,6 +75,7 @@ public abstract class AShip : MonoBehaviour
                 }
                 else
                 {
+                    Destroy(aiController.gameObject);
                     GameManager.Instance.RemoveEnemyShip(this);
                 }
             }
