@@ -82,6 +82,8 @@ public abstract class AShip : MonoBehaviour
         }
     }
 
+    private float maxEnergie = 0;
+
     private float energiepoints;
     public float Energiepoints
     {
@@ -92,9 +94,9 @@ public abstract class AShip : MonoBehaviour
         set
         {
             energiepoints = value;
-            if(energiepoints > data.Energierpoints)
+            if(energiepoints > maxEnergie)
             {
-                energiepoints = data.Energierpoints;
+                energiepoints = maxEnergie;
             }
 
             if (ui != null)
@@ -104,6 +106,22 @@ public abstract class AShip : MonoBehaviour
             {
                 energiepoints = 0;
             }
+        }
+    }
+
+    public float Modifire
+    {
+        get
+        {
+            return (Energiepoints / maxEnergie);
+        }
+    }
+
+    public float WeaponModifire
+    {
+        get
+        {
+            return 1 + (1 - (Energiepoints / maxEnergie));
         }
     }
 
@@ -147,6 +165,13 @@ public abstract class AShip : MonoBehaviour
 
         engine.Init(this);
 
+        maxEnergie = 0;
+        foreach(Pinwheels pinewhel in GetComponentsInChildren<Pinwheels>())
+        {
+            pinewheels.Add(pinewhel);
+            maxEnergie += pinewhel.Data.MaxEnergie;
+        }
+
         foreach (WeaponTower tower in GetComponentsInChildren<WeaponTower>())
         {
             turrets.Add(tower);
@@ -155,7 +180,21 @@ public abstract class AShip : MonoBehaviour
         foreach (AWeapon weapon in GetComponentsInChildren<AWeapon>())
         {
             weapons.Add(weapon);
+            weapon.Init(this);
         }
+    }
+
+    private void Update()
+    {
+        //Berechne Energie
+        energiepoints = 0;
+        foreach(Pinwheels wheel in pinewheels)
+        {
+            energiepoints += wheel.ProducedEnergie;
+        }
+        Energiepoints = energiepoints;
+
+
     }
 
     /// <summary>
@@ -229,7 +268,6 @@ public abstract class AShip : MonoBehaviour
     /// <returns>true if object reached its target; else false</returns>
     public bool MoveToPosition(Vector3 _pos)
     {
-        //TODO: Add Movement from navemeshAgent
         agent.SetDestination(_pos);
 
         return agent.remainingDistance <= agent.stoppingDistance;
