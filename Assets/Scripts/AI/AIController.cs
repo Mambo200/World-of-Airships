@@ -12,34 +12,49 @@ public class AIController : MonoBehaviour
     [SerializeField]
     public float m_RotateDirection;
 
+    /// <summary>
+    /// All Towers attached to <see cref="m_Ship"/>.
+    /// </summary>
+    private WeaponTower[] WeaponTowers { get; set; }
+
     // Start is called before the first frame update
     void Start()
     {
         if (m_Ship == null)
             Debug.LogError($"{nameof(m_Ship)} is null!");
 
-        //m_Ship.RotateShip(100);
+        WeaponTowers = m_Ship.GetComponentsInChildren<WeaponTower>();
+
+        foreach (WeaponTower wt in WeaponTowers)
+        {
+            wt.PlaceWeapon(WEAPONTYPE.CANNON);
+            wt.PlaceWeapon(WEAPONTYPE.CANNON);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        bool reachedTarget = DoMovement();
-        //DoRotation();
+        bool reachedTarget = DoMovementShip();
+        Debug.Log(DoRotationShip());
 
         if (reachedTarget)
         {
             DoShooting();
         }
-            
+
     }
 
-    private bool DoMovement()
+    private bool DoMovementShip()
     {
         return m_Ship.MoveToPosition(GetPlayer().ControlledShip.gameObject.transform.position);
     }
 
-    private void DoRotation()
+    /// <summary>
+    /// Rotate the ship
+    /// </summary>
+    /// <returns>true if ship looks at player; else false</returns>
+    private bool DoRotationShip()
     {
         Transform LookAtEnemy = PlayerContr.Get.ControlledShip.gameObject.transform;  // Who is the enemy?
 
@@ -49,16 +64,30 @@ public class AIController : MonoBehaviour
 
         if (rotationLeft <= 5
             && rotationLeft >= -5)
+        {
             m_Ship.RotateShip(0);
+            return true;
+        }
         else
         {
             m_Ship.RotateShip(Mathf.Clamp(rotationLeft, -1, 1));
+            return false;
         }
 
     }
 
     private void DoShooting()
     {
+        foreach (WeaponTower tower in WeaponTowers)
+        {
+            AWeapon[] weapons = tower.CurrentAttachedWeapons;
+
+            foreach (AWeapon w in weapons)
+            {
+                if (w.WeaponEnabled)
+                    w.Shoot();
+            }
+        }
         //TODO: Shoot
     }
 

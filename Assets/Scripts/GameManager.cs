@@ -1,10 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+
+    public string LoseScene = "Lose";
+    public string WinScene = "WinScene";
+
+    private List<AShip> livingEnemys = new List<AShip>();
 
     private void Awake()
     {
@@ -14,7 +20,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        SetIngameMouse();
     }
 
     // Update is called once per frame
@@ -43,6 +49,19 @@ public class GameManager : MonoBehaviour
 
     public void ActivateLoseCondition()
     {
-        Debug.Log("Du hast das Spiel verloren");
+        SetMenuMouse();
+        SceneManager.LoadScene(LoseScene);
+    }
+
+    public void RemoveEnemyShip(AShip _ship)
+    {
+        livingEnemys.Remove(_ship);
+        Destroy(_ship.gameObject);
+
+        if (livingEnemys.Count <= 0)
+        {
+            SetMenuMouse();
+            SceneManager.LoadScene(WinScene);
+        }
     }
 }

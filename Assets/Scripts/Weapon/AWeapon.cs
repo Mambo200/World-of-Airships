@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class AWeapon : MonoBehaviour
 {
+    private AShip controlledShip;
+
     #region Life
     [SerializeField]
     private float m_life;
@@ -110,14 +112,19 @@ public abstract class AWeapon : MonoBehaviour
         if (CurrentShootCooldownTimer > 0)
         {
             // reloading
-            CurrentShootCooldownTimer -= Mathf.Max(0, Time.deltaTime * CurrentShootCooldownMultiplier);
+            CurrentShootCooldownTimer -= Time.deltaTime * controlledShip.Modifire;
 
-            if (CurrentShootCooldownTimer == 0)
+            if (CurrentShootCooldownTimer <= 0)
             {
                 // reloading weapon done
                 CanShootAgain();
             }
         }
+    }
+
+    public void Init(AShip _contr)
+    {
+        controlledShip = _contr;
     }
 
     #region Shoot and Timer
@@ -174,12 +181,17 @@ public abstract class AWeapon : MonoBehaviour
     /// <summary>
     /// Shoot the weapon. Do not forget to check <see cref="WeaponEnabled"/>
     /// </summary>
-    public virtual void Shoot()
+    public virtual bool Shoot()
     {
-        if (WeaponEnabled)
+        if (WeaponEnabled
+            && CanShoot)
         {
             CurrentShootCooldownTimer = ShootCooldownTime;
+
+            return true;
         }
+
+        return false;
     }
     #endregion
 }

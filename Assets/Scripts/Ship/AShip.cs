@@ -5,8 +5,12 @@ using UnityEngine.AI;
 
 public abstract class AShip : MonoBehaviour
 {
+    [Header("Shipsettings")]
     [SerializeField]
     private ShipData data;
+
+    public bool IsPlayer = false;
+    private AIController aiController;
 
     private UI_AUnit ui;
     public UI_AUnit UI
@@ -65,10 +69,20 @@ public abstract class AShip : MonoBehaviour
             if (hitpoints <= 0)
             {
                 hitpoints = 0;
-                GameManager.Instance.ActivateLoseCondition();
+                if (IsPlayer)
+                {
+                    GameManager.Instance.ActivateLoseCondition();
+                }
+                else
+                {
+                    Destroy(aiController.gameObject);
+                    GameManager.Instance.RemoveEnemyShip(this);
+                }
             }
         }
     }
+
+    private float maxEnergie = 0;
 
     private float energiepoints;
     public float Energiepoints
@@ -80,9 +94,9 @@ public abstract class AShip : MonoBehaviour
         set
         {
             energiepoints = value;
-            if(energiepoints > data.Energierpoints)
+            if(energiepoints > maxEnergie)
             {
-                energiepoints = data.Energierpoints;
+                energiepoints = maxEnergie;
             }
 
             if (ui != null)
@@ -92,6 +106,22 @@ public abstract class AShip : MonoBehaviour
             {
                 energiepoints = 0;
             }
+        }
+    }
+
+    public float Modifire
+    {
+        get
+        {
+            return (Energiepoints / maxEnergie);
+        }
+    }
+
+    public float WeaponModifire
+    {
+        get
+        {
+            return 1 + (1 - (Energiepoints / maxEnergie));
         }
     }
 
@@ -135,6 +165,13 @@ public abstract class AShip : MonoBehaviour
 
         engine.Init(this);
 
+        maxEnergie = 0;
+        foreach(Pinwheels pinewhel in GetComponentsInChildren<Pinwheels>())
+        {
+            pinewheels.Add(pinewhel);
+            maxEnergie += pinewhel.Data.MaxEnergie;
+        }
+
         foreach (WeaponTower tower in GetComponentsInChildren<WeaponTower>())
         {
             turrets.Add(tower);
@@ -143,7 +180,21 @@ public abstract class AShip : MonoBehaviour
         foreach (AWeapon weapon in GetComponentsInChildren<AWeapon>())
         {
             weapons.Add(weapon);
+            weapon.Init(this);
         }
+    }
+
+    private void Update()
+    {
+        //Berechne Energie
+        energiepoints = 0;
+        foreach(Pinwheels wheel in pinewheels)
+        {
+            energiepoints += wheel.ProducedEnergie;
+        }
+        Energiepoints = energiepoints;
+
+
     }
 
     /// <summary>
@@ -168,7 +219,6 @@ public abstract class AShip : MonoBehaviour
         {
             Debug.LogWarning("Beim Schiff fehlt der Rigidbody");
         }
-        //TODO: Move Ship
     }
 
     /// <summary>
@@ -187,7 +237,6 @@ public abstract class AShip : MonoBehaviour
         {
             Debug.LogWarning("Beim Schiff fehlt der Rigidbody");
         }
-        //TODO: Rotate Ship
     }
 
     /// <summary>
@@ -202,7 +251,6 @@ public abstract class AShip : MonoBehaviour
             tower.RotateX(_x);
             tower.RotateY(_y);
         }
-        //TODO: Rotate WeaponTower
     }
 
     public virtual void Fire()
@@ -211,7 +259,6 @@ public abstract class AShip : MonoBehaviour
         {
             weapon.Shoot();
         }
-        //TODO: Weapon Fire
     }
 
     /// <summary>
@@ -221,7 +268,6 @@ public abstract class AShip : MonoBehaviour
     /// <returns>true if object reached its target; else false</returns>
     public bool MoveToPosition(Vector3 _pos)
     {
-        //TODO: Add Movement from navemeshAgent
         agent.SetDestination(_pos);
 
         return agent.remainingDistance <= agent.stoppingDistance;
