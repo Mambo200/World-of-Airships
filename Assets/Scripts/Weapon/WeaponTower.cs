@@ -18,9 +18,24 @@ public class WeaponTower : MonoBehaviour
     private WeaponPrefabsData m_WeaponPrefabsData;
 
     /// <summary>
-    /// Placed weapon on this tower
+    /// Placed weapon on this tower. AWeapons can be null
     /// </summary>
     public AWeapon[] AttachedWeapons { get; private set; }
+
+    public AWeapon[] CurrentAttachedWeapons
+    {
+        get
+        {
+            List<AWeapon> weapons = new List<AWeapon>();
+            for (int i = 0; i < AttachedWeapons.Length; i++)
+            {
+                if (AttachedWeapons[i] != null)
+                    weapons.Add(AttachedWeapons[i]);
+            }
+
+            return weapons.ToArray();
+        }
+    }
 
     private int m_AmountAttachedWeapons;
     public int AmountAttachedWeapons
@@ -171,7 +186,16 @@ public class WeaponTower : MonoBehaviour
     /// <returns><see cref="AWeapon"/> component of spawned gameObject</returns>
     private AWeapon CreateWeapon(WEAPONTYPE _type, int _index)
     {
-        GameObject go = GameObject.Instantiate(m_WeaponPrefabsData.GameObjectCannonPrefab, m_WeaponSpawnTransform[_index]);
+        GameObject go = null;
+        switch (_type)
+        {
+            case WEAPONTYPE.CANNON:
+                go = GameObject.Instantiate(m_WeaponPrefabsData.GameObjectCannonPrefab, m_WeaponSpawnTransform[_index]);
+                break;
+            default:
+                Debug.LogWarning($"Enum value {_type.ToString()} is not implemented.", this.gameObject);
+                break;
+        }
         AWeapon to = go.GetComponent<AWeapon>();
 
         return to;
