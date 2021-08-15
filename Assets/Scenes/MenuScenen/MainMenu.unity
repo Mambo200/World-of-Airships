@@ -1786,7 +1786,7 @@ MonoBehaviour:
   win_levelOptions: {fileID: 700670659}
   win_controll: {fileID: 957182264}
   win_credits: {fileID: 2005800580}
-  Level0: 
+  Level0: Lvl1
 --- !u!1 &1894277302
 GameObject:
   m_ObjectHideFlags: 0

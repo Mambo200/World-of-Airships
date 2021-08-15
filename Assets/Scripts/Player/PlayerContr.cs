@@ -15,6 +15,9 @@ public class PlayerContr : MonoBehaviour
     public AShip ControlledShip;
 
     [SerializeField]
+    private float height = 2f;
+
+    [SerializeField]
     private UI_AUnit ingameUI;
 
     [Header("X Axis Settings")]
@@ -76,7 +79,7 @@ public class PlayerContr : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = ControlledShip.transform.position;
+        transform.position = ControlledShip.transform.position + (Vector3.up * height);
         transform.eulerAngles = new Vector3(0, ControlledShip.transform.eulerAngles.y,0);
 
         ControlledShip.MoveShip(Input.GetAxis("Vertical"));
