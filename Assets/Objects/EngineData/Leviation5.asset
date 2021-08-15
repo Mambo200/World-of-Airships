@@ -17,4 +17,4 @@ MonoBehaviour:
   backwardAcl: 2500
   turnStrength: 1000
   hoverForce: 900
-  hoverHeight: 4
+  hoverHeight: 6
