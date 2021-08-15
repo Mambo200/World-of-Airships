@@ -59,6 +59,7 @@ public class PlayerContr : MonoBehaviour
         cam_zoom_cam.transform.localPosition = Vector3.forward * ((cam_zoom_max - cam_zoom_min) / 2);
 
         ControlledShip.UI = ingameUI;
+        ControlledShip.IsPlayer = true;
     }
 
     // Update is called once per frame
@@ -75,7 +76,7 @@ public class PlayerContr : MonoBehaviour
 
         cam_X = Mathf.Clamp(cam_X, cam_X_min, cam_X_max);
         cam_Anchor.localEulerAngles = new Vector3(cam_X, cam_Y, 0);
-        ControlledShip.RotateWeapon(cam_X, cam_Y);
+        ControlledShip.RotateWeapon(cam_X, (cam_Y + ControlledShip.transform.localEulerAngles.y));
 
         if (Input.GetMouseButtonDown(0))
         {
