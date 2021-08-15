@@ -180,6 +180,7 @@ public abstract class AShip : MonoBehaviour
         foreach (AWeapon weapon in GetComponentsInChildren<AWeapon>())
         {
             weapons.Add(weapon);
+            weapon.Init(this);
         }
     }
 
